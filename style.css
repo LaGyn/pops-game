@@ -1,0 +1,62 @@
+html {
+    background-image: radial-gradient(circle, rgb(27,5,32), rgb(67, 9, 67), rgb(98, 6, 98));
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+#tausta {
+    position:absolute;
+    top:30%;
+    width:50%;
+    width:100%;
+}
+
+h1 {
+    font-family: 'Shrikhand', cursive;
+    font-size: 120px;
+    background-color: #e586cf;
+    background-image: repeating-linear-gradient(130deg, white, rgb(201, 124, 136), rgb(137, 59, 156), rgb(227, 157, 52), yellow 7%);
+    background-size: 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent; 
+    -moz-text-fill-color: transparent;
+    text-align: center;
+    animation-name: changeSize;
+    animation-duration: 3s;
+    animation-iteration-count: 1;
+    
+}
+
+@keyframes changeSize {
+    0% { transform: scale(0);}
+    100% {transform: scale(1);}
+}
+
+.start {
+    margin: auto;
+    width:50px;
+    padding: 60px 0;
+}
+
+button {
+    border-radius: 5px;
+    background-color: rgb(224, 95, 30);
+    border: 1px solid rgb(249, 251, 249);
+    color:rgb(249, 251, 249);
+    padding: 10px;
+}
+
+button:hover {
+    background-color: rgb(244, 15, 15);
+}
+
+footer {
+    color:yellow;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align: center;
+    padding: 20px;
+}
