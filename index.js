@@ -127,10 +127,14 @@ function drawBackground(){
     ctx.fillStyle = colorDarkerMidBlue;
     ctx.fill();
 }
-let pallo = {
+
+const player = {
     x: 45,
     y: window.innerHeight-70,
-    size: 40
+    size: 40,
+    color: 'blue',
+    speedX: 10,
+    speedY: 10
 }
 
 let pommi = {
@@ -147,10 +151,16 @@ function startGame(){
     taustavari.style.backgroundImage = 'none';
     taustavari.style.backgroundColor = colorMidBlue;
     canvas.style.display = "block";
-    drawBackground();
-    pallo = new component(pallo.x, pallo.y, "blue") 
-    pommi = new component(pommi.x, pommi.y, "pink") 
-    
+    setInterval(mainLoop, 1000/60)
+    //pallo = new component(pallo.x, pallo.y, "blue") 
+      
+}
+
+function drawPlayer(x, y, size, color){
+    ctx.beginPath();
+    ctx.arc(x, y, size, 0, 2 * Math.PI);
+    ctx.fillStyle = color;
+    ctx.fill();
 }
 
 function component(x, y, color){
@@ -165,7 +175,13 @@ function component(x, y, color){
     ctx.fill(); 
 }
 
-let speed = 5;
+function mainLoop(){
+    drawBackground();
+    drawPlayer(player.x, player.y, player.size, player.color, player.speedX, player.speedY);
+    playerMove();
+    pommi = new component(pommi.x, pommi.y, "pink")
+}
+//let speed = 5;
 let leftKeyPress = false;
 let rightKeyPress = false;
 let upKeyPress = false;
@@ -185,10 +201,10 @@ function keyPressed(event){
         rightKeyPress = true;
     }
     if(event.keyCode == UP_KEY){
-        uptKeyPress = true;
+        upKeyPress = true;
     }
     if(event.keyCode == DOWN_KEY){
-        downtKeyPress = true;
+        downKeyPress = true;
     }
 }
 
@@ -208,16 +224,17 @@ function keyReleased(event){
 }
 
 function playerMove(){
+    console.log('liiku')
     if(leftKeyPress){
-        pallo.x -= speed;
+        player.x -= player.speedX;
     }
     if(rightKeyPress){
-        pallo.x += speed;
+        player.x += player.speedX;
     }
     if(upKeyPress){
-        pallo.y -= speed;
+        player.y -= player.speedY;
     }
     if(downKeyPress){
-        pallo.y += speed;
+        player.y += player.speedY;
     }
 }
