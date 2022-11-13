@@ -1,16 +1,18 @@
-html {
+body {
     background-image: radial-gradient(circle, rgb(27,5,32), rgb(67, 9, 67), rgb(98, 6, 98));
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
     background-size: cover;
+    z-index: 1;
+    overflow: hidden;
 }
 
 #tausta {
     position:absolute;
     top:30%;
-    width:50%;
     width:100%;
+    height:fit-content;
 }
 
 h1 {
@@ -59,4 +61,9 @@ footer {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     text-align: center;
     padding: 20px;
+}
+
+canvas {
+    margin: 0px;
+    z-index: 2;
 }
