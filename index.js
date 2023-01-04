@@ -18,7 +18,7 @@ const colorLightBlue = 'rgb(154, 177, 226)';
 const colorMidBlue = 'rgb(104, 133, 195)';
 const colorDarkerMidBlue = 'rgb(97, 119, 166)';
 const BgColorDarkBlue = 'rgb(85, 105, 149)';
-const colors = ['pink', 'green', 'yellow', 'orange'];
+const colors = ['#FFCCCC', '#CCCCFF', '#FF99FF', '#99FFCC', '#E0E0E0'];
 
 function drawBackground(){
     ctx.fillStyle = BgColorDarkBlue;
@@ -191,6 +191,10 @@ function arpooVarin() {
     return arvottu;
 }
 
+function laskePisteet(){
+    let jana = Math.sqrt(((pommi.posX - player.x) * (pommi.posX - player.x)) + ((pommi.posY - player.y) * (pommi.posY - player.y)));
+    console.log(jana)
+}
 function mainLoop(){
     drawBackground();
     drawPlayer(player.x, player.y, player.size, player.color, player.speedX, player.speedY);
@@ -256,17 +260,21 @@ function playerMove(){
         player.y += player.speedY;
     }
 }
-//let variation = Math.floor((Math.random() * canvas.height) + 100)
+
 // Pommit tippuu alaspäin vaihtelevilla nopeuksilla:
 function bombMove(){
     //console.log('pommi liikkuu')
     pommi.posY += pommi.speed;
-    
-    //console.log(variation)
     if (pommi.posY > canvas.height) {
         pommi.posY = 0 - 20;
         pommi.posX = Math.floor((Math.random() * (canvas.width - 50)) + 50);
         pommi.speed = Math.floor((Math.random() * 10) + 3)
         arpooVarin()
     }
+    
+    let jana = Math.sqrt(((pommi.posX - player.x) * (pommi.posX - player.x)) + ((pommi.posY - player.y) * (pommi.posY - player.y)));
+    if (jana <= 80){
+        console.log('Osuma!')
+    }
+    
 }
