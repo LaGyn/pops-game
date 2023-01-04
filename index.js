@@ -18,6 +18,7 @@ const colorLightBlue = 'rgb(154, 177, 226)';
 const colorMidBlue = 'rgb(104, 133, 195)';
 const colorDarkerMidBlue = 'rgb(97, 119, 166)';
 const BgColorDarkBlue = 'rgb(85, 105, 149)';
+const colors = ['pink', 'green', 'yellow', 'orange'];
 
 function drawBackground(){
     ctx.fillStyle = BgColorDarkBlue;
@@ -137,23 +138,25 @@ const player = {
     speedY: 10
 }
 
+let bombColor = colors[Math.floor((Math.random() * [colors.length-1]))]
+
 let pommi = {
-    x: 600,
-    y: 40,
-    size: 40
+    posX: Math.floor((Math.random() * (canvas.width-50)) + 50),
+    posY: 0 - 20,
+    size: 40,
+    bcolor: bombColor,
+    speed: Math.floor((Math.random() * 10) + 3)
 }
-let colors = ['pink', 'green', 'yellow', 'orange'];
 
 function startGame(){
     let frontPage = document.getElementById('tausta');
     let taustavari = document.querySelector('body');
     frontPage.style.display = 'none';
-    taustavari.style.backgroundImage = 'none';
+    taustavari.style.backgroundImage = 'none'; // Piilottaa etusivun radial-gradientin joka on tehty background imagella
     taustavari.style.backgroundColor = colorMidBlue;
     canvas.style.display = "block";
     setInterval(mainLoop, 1000/60)
-    //pallo = new component(pallo.x, pallo.y, "blue") 
-      
+    
 }
 
 function drawPlayer(x, y, size, color){
@@ -162,26 +165,35 @@ function drawPlayer(x, y, size, color){
     ctx.fillStyle = color;
     ctx.fill();
 }
-
-function component(x, y, color){
+/*
+function component(x, y, bcolor, speed){
     this.x = x;
     this.y = y;
-    //ctx = pelialue.ctx;
+    this.bcolor = bcolor;
+    this.speed = speed;
     ctx.beginPath();
     ctx.arc(this.x, this.y, 40, 0, 2 * Math.PI);
-    ctx.strokeStyle = color;
-    ctx.stroke();
-    ctx.fillStyle = color;
+    ctx.fillStyle = this.bcolor;
     ctx.fill(); 
+}*/
+
+function drawBomb(posX, posY){
+    //bombColor = (Math.floor(Math.random() * [colors.length-1]) )
+    ctx.beginPath();
+    ctx.arc(posX, posY, 40, 0, 2 * Math.PI)
+    ctx.fillStyle = colors[bombColor]
+    ctx.fill();
 }
 
 function mainLoop(){
     drawBackground();
     drawPlayer(player.x, player.y, player.size, player.color, player.speedX, player.speedY);
     playerMove();
-    pommi = new component(pommi.x, pommi.y, "pink")
+    //pommi = new component(pommi.x, pommi.y, pommi.bcolor, pommi.speed)
+    drawBomb(pommi.posX, pommi.posY)
+    bombMove()
 }
-//let speed = 5;
+
 let leftKeyPress = false;
 let rightKeyPress = false;
 let upKeyPress = false;
@@ -224,7 +236,7 @@ function keyReleased(event){
 }
 
 function playerMove(){
-    console.log('liiku')
+    //console.log('liiku')
     if(leftKeyPress){
         player.x -= player.speedX;
     }
@@ -236,5 +248,16 @@ function playerMove(){
     }
     if(downKeyPress){
         player.y += player.speedY;
+    }
+}
+
+// Pommit tippuu alaspäin vaihtelevilla nopeuksilla:
+function bombMove(){
+    //console.log('pommi liikkuu')
+    pommi.posY += pommi.speed;
+    if (pommi.posY > canvas.height) {
+        pommi.posY = 0 - 20;
+        pommi.posX = Math.floor(Math.random() * (canvas.width - 40));
+        pommi.speed = Math.floor((Math.random() * 10) + 3)
     }
 }
