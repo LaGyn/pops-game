@@ -62,8 +62,14 @@ footer {
     text-align: center;
     padding: 20px;
 }
-
 canvas {
+    position: absolute;
+}
+#gameArea {
     margin: 0px;
     z-index: 2;
+}
+#playerObject {
+    margin: 0px;
+    z-index: 4;
 }

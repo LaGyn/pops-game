@@ -1,9 +1,13 @@
 const canvas = document.getElementById('gameArea');
 let ctx = canvas.getContext('2d');
+const canvas2 = document.getElementById('playerObject')
+let c = canvas2.getContext('2d');
 
 function resize(){
     canvas.width = window.innerWidth-20;
     canvas.height = window.innerHeight-20;
+    canvas2.width = window.innerWidth-20;
+    canvas2.height = window.innerHeight-20;
 }
 
 resize();
@@ -18,7 +22,10 @@ const colorLightBlue = 'rgb(154, 177, 226)';
 const colorMidBlue = 'rgb(104, 133, 195)';
 const colorDarkerMidBlue = 'rgb(97, 119, 166)';
 const BgColorDarkBlue = 'rgb(85, 105, 149)';
-const colors = ['#FFCCCC', '#CCCCFF', '#FF99FF', '#99FFCC', '#E0E0E0'];
+const colors = ['#FFCCCC', '#CCCCFF', '#FF99FF', '#99FFCC', '#E0E0E0', '#FF0000'];
+let points = 0;
+let kosketus = false;
+let jana;
 
 function drawBackground(){
     ctx.fillStyle = BgColorDarkBlue;
@@ -127,13 +134,18 @@ function drawBackground(){
     ctx.closePath();
     ctx.fillStyle = colorDarkerMidBlue;
     ctx.fill();
+
+    ctx.font = '30px Arial';
+    ctx.fillStyle = 'white';
+    ctx.textAlign = 'left';
+    ctx.fillText(`POINTS: ${points}`, 20, 30);
 }
 
 const player = {
     x: 45,
     y: window.innerHeight-70,
     size: 40,
-    color: 'blue',
+    color: 'white',
     speedX: 10,
     speedY: 10
 }
@@ -155,27 +167,28 @@ function startGame(){
     taustavari.style.backgroundImage = 'none'; // Piilottaa etusivun radial-gradientin joka on tehty background imagella
     taustavari.style.backgroundColor = colorMidBlue;
     canvas.style.display = "block";
+    canvas2.style.display = "block";
     setInterval(mainLoop, 1000/60)
-    
 }
 
+let sh = 0;
 function drawPlayer(x, y, size, color){
-    ctx.beginPath();
-    ctx.arc(x, y, size, 0, 2 * Math.PI);
-    ctx.fillStyle = color;
-    ctx.fill();
+    c.clearRect(0, 0, canvas2.width, canvas2.height)
+    c.beginPath();
+    c.arc(x, y, size, 0, 2 * Math.PI);
+    c.fillStyle = color;
+    c.fill();
+    
+    if (kosketus === true) {
+        sh += 3
+        c.shadowColor = 'white';
+        c.shadowBlur = sh;
+        c.shadowOffsetX = 0;
+        c.shadowOffsetY = 0;
+        console.log('sh: ' + sh)
+        kosketus = false;
+    }
 }
-/*
-function component(x, y, bcolor, speed){
-    this.x = x;
-    this.y = y;
-    this.bcolor = bcolor;
-    this.speed = speed;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, 40, 0, 2 * Math.PI);
-    ctx.fillStyle = this.bcolor;
-    ctx.fill(); 
-}*/
 
 function drawBomb(posX, posY){
     bombColor = colors[arvottu]
@@ -183,7 +196,7 @@ function drawBomb(posX, posY){
     ctx.arc(posX, posY, 40, 0, 2 * Math.PI)
     ctx.fillStyle = bombColor;
     ctx.fill();
-    console.log(pommi.posX)
+    //console.log(pommi.posX)
 }
 
 function arpooVarin() {
@@ -191,10 +204,6 @@ function arpooVarin() {
     return arvottu;
 }
 
-function laskePisteet(){
-    let jana = Math.sqrt(((pommi.posX - player.x) * (pommi.posX - player.x)) + ((pommi.posY - player.y) * (pommi.posY - player.y)));
-    console.log(jana)
-}
 function mainLoop(){
     drawBackground();
     drawPlayer(player.x, player.y, player.size, player.color, player.speedX, player.speedY);
@@ -215,7 +224,7 @@ const UP_KEY = 38;
 const DOWN_KEY = 40;
 
 function keyPressed(event){
-    console.log(event.keyCode)
+    //console.log(event.keyCode)
     if(event.keyCode == LEFT_KEY){
         leftKeyPress = true;
     }
@@ -250,7 +259,7 @@ function playerMove(){
     if(leftKeyPress && player.x > 50){
         player.x -= player.speedX;
     }
-    if(rightKeyPress && player.x < canvas.width - 50){
+    if(rightKeyPress && player.x < canvas2.width - 50){
         player.x += player.speedX;
     }
     if(upKeyPress && player.y > 50){
@@ -259,11 +268,11 @@ function playerMove(){
     if(downKeyPress && player.y < window.innerHeight-70){
         player.y += player.speedY;
     }
+    laskePisteet();
 }
 
 // Pommit tippuu alaspäin vaihtelevilla nopeuksilla:
 function bombMove(){
-    //console.log('pommi liikkuu')
     pommi.posY += pommi.speed;
     if (pommi.posY > canvas.height) {
         pommi.posY = 0 - 20;
@@ -271,10 +280,25 @@ function bombMove(){
         pommi.speed = Math.floor((Math.random() * 10) + 3)
         arpooVarin()
     }
-    
-    let jana = Math.sqrt(((pommi.posX - player.x) * (pommi.posX - player.x)) + ((pommi.posY - player.y) * (pommi.posY - player.y)));
-    if (jana <= 80){
-        console.log('Osuma!')
+}
+
+function laskePisteet() {
+    jana = Math.sqrt(((pommi.posX - player.x) * (pommi.posX - player.x)) + ((pommi.posY - player.y) * (pommi.posY - player.y)));
+    if (arvottu == 5 && jana <= 80){
+        points = 0;
+        sh = 0;
+        //console.log('pisteet: ' + points)
     }
-    
+    if (jana <= 80){
+        kosketus = true;
+        pommi.posY = 0 - 20; // Pommi palautuu lähtöön
+        pommi.posX = Math.floor((Math.random() * (canvas.width - 50)) + 50);
+        pommi.speed = Math.floor((Math.random() * 10) + 3)
+        
+        points += 10;
+        arpooVarin()
+        //console.log('pisteet: ' + points) 
+        console.log(kosketus)
+    } 
+    return kosketus; 
 }
