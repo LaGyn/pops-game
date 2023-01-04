@@ -237,27 +237,30 @@ function keyReleased(event){
 
 function playerMove(){
     //console.log('liiku')
-    if(leftKeyPress){
+    if(leftKeyPress && player.x > 50){
         player.x -= player.speedX;
     }
-    if(rightKeyPress){
+    if(rightKeyPress && player.x < canvas.width - 50){
         player.x += player.speedX;
     }
-    if(upKeyPress){
+    if(upKeyPress && player.y > 50){
         player.y -= player.speedY;
     }
-    if(downKeyPress){
+    if(downKeyPress && player.y < window.innerHeight-70){
         player.y += player.speedY;
     }
 }
-
+let variation = Math.floor((Math.random() * canvas.height) + 100)
 // Pommit tippuu alaspäin vaihtelevilla nopeuksilla:
 function bombMove(){
     //console.log('pommi liikkuu')
     pommi.posY += pommi.speed;
-    if (pommi.posY > canvas.height) {
+    
+    console.log(variation)
+    if (pommi.posY >= variation) {
+        drawBomb(pommi.posX, pommi.posY)
         pommi.posY = 0 - 20;
-        pommi.posX = Math.floor(Math.random() * (canvas.width - 40));
+        pommi.posX = Math.floor((Math.random() * (canvas.width-50)) + 50);
         pommi.speed = Math.floor((Math.random() * 10) + 3)
     }
 }
