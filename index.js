@@ -137,11 +137,11 @@ const player = {
     speedX: 10,
     speedY: 10
 }
-
-let bombColor = colors[Math.floor((Math.random() * [colors.length-1]))]
+let arvottu = Math.floor(Math.random() * [colors.length])
+let bombColor = colors[arvottu];
 
 let pommi = {
-    posX: Math.floor((Math.random() * (canvas.width-50)) + 50),
+    posX: Math.floor((Math.random() * (canvas.width - 50)) + 50),
     posY: 0 - 20,
     size: 40,
     bcolor: bombColor,
@@ -178,11 +178,17 @@ function component(x, y, bcolor, speed){
 }*/
 
 function drawBomb(posX, posY){
-    //bombColor = (Math.floor(Math.random() * [colors.length-1]) )
+    bombColor = colors[arvottu]
     ctx.beginPath();
     ctx.arc(posX, posY, 40, 0, 2 * Math.PI)
-    ctx.fillStyle = colors[bombColor]
+    ctx.fillStyle = bombColor;
     ctx.fill();
+    console.log(pommi.posX)
+}
+
+function arpooVarin() {
+    arvottu = Math.floor(Math.random() * [colors.length])
+    return arvottu;
 }
 
 function mainLoop(){
@@ -250,17 +256,17 @@ function playerMove(){
         player.y += player.speedY;
     }
 }
-let variation = Math.floor((Math.random() * canvas.height) + 100)
+//let variation = Math.floor((Math.random() * canvas.height) + 100)
 // Pommit tippuu alaspäin vaihtelevilla nopeuksilla:
 function bombMove(){
     //console.log('pommi liikkuu')
     pommi.posY += pommi.speed;
     
-    console.log(variation)
-    if (pommi.posY >= variation) {
-        drawBomb(pommi.posX, pommi.posY)
+    //console.log(variation)
+    if (pommi.posY > canvas.height) {
         pommi.posY = 0 - 20;
-        pommi.posX = Math.floor((Math.random() * (canvas.width-50)) + 50);
+        pommi.posX = Math.floor((Math.random() * (canvas.width - 50)) + 50);
         pommi.speed = Math.floor((Math.random() * 10) + 3)
+        arpooVarin()
     }
 }
