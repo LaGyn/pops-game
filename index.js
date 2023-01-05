@@ -15,6 +15,12 @@ window.addEventListener('resize', resize);
 window.addEventListener('keydown', keyPressed);
 window.addEventListener('keyup', keyReleased);
 
+window.onload = function() {
+    const prelude = new Audio('audios/notification.mp3')
+    prelude.loop = false;
+    prelude.play()
+}
+
 let button = document.getElementById('load');
 button.addEventListener('click', startGame);
 
@@ -22,7 +28,7 @@ const colorLightBlue = 'rgb(154, 177, 226)';
 const colorMidBlue = 'rgb(104, 133, 195)';
 const colorDarkerMidBlue = 'rgb(97, 119, 166)';
 const BgColorDarkBlue = 'rgb(85, 105, 149)';
-const colors = ['#FFCCCC', '#CCCCFF', '#FF99FF', '#99FFCC', '#E0E0E0', '#FF0000'];
+const colors = ['#FFCCCC', '#9999FF', '#FF99FF', '#99FFCC', '#FF66B2', '#FF0000'];
 let points = 0;
 let kosketus = false;
 let jana;
@@ -296,9 +302,16 @@ function laskePisteet() {
         pommi.speed = Math.floor((Math.random() * 10) + 3)
         
         points += 10;
+        touchSound()
         arpooVarin()
         //console.log('pisteet: ' + points) 
         console.log(kosketus)
     } 
     return kosketus; 
+}
+
+function touchSound(){
+    const touch = new Audio('audios/pop-94319.mp3')
+    touch.loop = false;
+    touch.play()
 }
